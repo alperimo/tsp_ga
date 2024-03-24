@@ -1,9 +1,7 @@
 #include "point.h"
 
-Point::Point(int id, float latitude, float longitude){
-    this->id = id;
-    this->latitude = latitude;
-    this->longitude = longitude;
+Point::Point(int id_, float latitude_, float longitude_) : id(id_), latitude(latitude_), longitude(longitude_)
+{
 }
 
 int Point::GetId() const{

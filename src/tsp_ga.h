@@ -4,6 +4,7 @@
 #include "file_reader.h"
 #include "distance_helper.h"
 #include "tsp_ga_config.h"
+#include "population.h"
 
 class TspGa{
     public:
@@ -11,11 +12,14 @@ class TspGa{
 
         void Solve();
 
-        static TspGaConfig gaConfig;
+        static TspGaConfig config;
     
     private:
         FileReader fileReader;
         DistanceHelper distanceHelper;
+
+        std::vector<Point> points;
+        Population population;
 };
 
 #endif

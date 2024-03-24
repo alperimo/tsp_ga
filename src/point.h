@@ -3,7 +3,7 @@
 
 class Point{
     public:
-        Point(int id, float latitude, float longitude);
+        Point(int id_, float latitude_, float longitude_);
 
         int GetId() const;
         float GetLatitude() const;

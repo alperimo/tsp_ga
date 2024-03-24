@@ -1,5 +1,5 @@
 struct TspGaConfig{
-    unsigned int initialPopulationSize = 20;
-    std::size_t chromosomeSize;
+    unsigned int populationSize = 20;
+    unsigned int chromosomeSize;
     unsigned int maxGenerations = 100;
 };
