@@ -12,7 +12,7 @@ class DistanceHelper{
         double CalculateDistance(const Point& point1, const Point& point2);
         void CreateDistanceMatrixFromPoints(const std::vector<Point>& points);
         
-        const double GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2);
+        double GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2);
         const auto GetDistanceMatrix() const { return distanceMatrix; }
 
     private:

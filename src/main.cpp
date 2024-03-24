@@ -1,13 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-#include "tsp.h"
+#include "tsp_ga.h"
 
 int main()
 {
-    Tsp tsp;
-    tsp.Run();
-    
+    TspGa tspGa;
+    tspGa.Solve();
+
     return 0;
 }

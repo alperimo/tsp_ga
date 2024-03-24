@@ -1,5 +1,6 @@
-#include "distance_helper.h"
 #include <math.h>
+
+#include "distance_helper.h"
 
 DistanceHelper::DistanceHelper(){
     // Constructor
@@ -34,6 +35,6 @@ void DistanceHelper::CreateDistanceMatrixFromPoints(const std::vector<Point>& po
     }
 }
 
-const double DistanceHelper::GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2){
+double DistanceHelper::GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2){
     return this->distanceMatrix[pointIndex1][pointIndex2];
 }
