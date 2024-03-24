@@ -2,15 +2,12 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+#include "tsp.h"
 
 int main()
 {
-    vector<string> msg {"Hello", "C++", "From", "TSP", "Killer!"};
-
-    for (const string& word : msg)
-    {
-        cout << word << " ";
-    }
-    cout << endl;
+    Tsp tsp;
+    tsp.Run();
+    
+    return 0;
 }
