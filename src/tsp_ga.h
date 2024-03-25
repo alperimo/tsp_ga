@@ -10,13 +10,14 @@ class TspGa{
     public:
         TspGa();
 
+        void InitPopulation();
         void Solve();
 
         static TspGaConfig config;
-    
+        static DistanceHelper distanceHelper;
+
     private:
         FileReader fileReader;
-        DistanceHelper distanceHelper;
 
         std::vector<Point> points;
         Population population;

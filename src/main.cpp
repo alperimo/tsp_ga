@@ -3,6 +3,7 @@
 int main()
 {
     TspGa tspGa;
+    tspGa.InitPopulation();
     tspGa.Solve();
 
     return 0;

@@ -9,8 +9,12 @@ class Population{
         Population();
 
         void AddChromosome(const Chromosome& chromosome);
+        void CalculateFitnessScores();
         void ClearPopulation();
-        void CreateRandomInitialPopulation();
+        void GenerateRandomInitialPopulation();
+        const auto& GetPopulation() const { return population; }
+
+        void SelectBestChromosomes();
 
     private:
         std::vector<Chromosome> population;
