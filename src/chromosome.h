@@ -12,7 +12,7 @@ class Chromosome{
 
         void CalculateFitnessScore();
 
-        double GetFitnessScore() const { return fitnessScore; }
+        long double GetFitnessScore() const { return fitnessScore; }
         unsigned int GetGene(const unsigned int& index) const { return genes[index]; }
         unsigned int GetGenSize() const { return static_cast<unsigned int>(genes.size()); }
 
@@ -21,7 +21,7 @@ class Chromosome{
 
     private:
         std::vector<unsigned int> genes;
-        double fitnessScore = -1.0;
+        long double fitnessScore = -1.0;
 };
 
 #endif

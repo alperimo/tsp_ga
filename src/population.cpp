@@ -26,7 +26,7 @@ void Population::GenerateRandomInitialPopulation(){
     this->ClearPopulation();
 
     Chromosome chromosome;
-    for (unsigned int geneIndex = 1; geneIndex < TspGa::config.chromosomeSize + 1; geneIndex++){
+    for (unsigned int geneIndex = 0; geneIndex < TspGa::config.chromosomeSize; geneIndex++){
         chromosome.AddGene(geneIndex);
     }
 
@@ -50,7 +50,7 @@ void Population::SelectBestChromosomes(){
         return c1.GetFitnessScore() < c2.GetFitnessScore();
     });
 
-    const double eraseSize = static_cast<double>(population.size()) * 0.25;
+    const double eraseSize = static_cast<double>(population.size()) * TspGa::config.bestChromosomesPct;
     auto firstIndexToRemove = static_cast<decltype(population.begin())::difference_type>(eraseSize);
     population.erase(population.begin() + firstIndexToRemove, population.end());
 }

@@ -1,6 +1,6 @@
 #include "point.h"
 
-Point::Point(int id_, float latitude_, float longitude_) : id(id_), latitude(latitude_), longitude(longitude_)
+Point::Point(int id_, long double latitude_, long double longitude_) : id(id_), latitude(latitude_), longitude(longitude_)
 {
 }
 
@@ -8,10 +8,10 @@ int Point::GetId() const{
     return this->id;
 }
 
-float Point::GetLatitude() const{
+long double Point::GetLatitude() const{
     return this->latitude;
 }
 
-float Point::GetLongitude() const{
+long double Point::GetLongitude() const{
     return this->longitude;
 }

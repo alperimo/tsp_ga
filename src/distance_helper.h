@@ -5,18 +5,22 @@
 
 #include "point.h"
 
+#define M_PI 3.14159265358979323846
+#define RADIO_TIERRA 6371.0
+
 class DistanceHelper{
     public:
         DistanceHelper();
 
-        double CalculateDistance(const Point& point1, const Point& point2);
+        long double CalculateDistance(const Point& point1, const Point& point2);
         void CreateDistanceMatrixFromPoints(const std::vector<Point>& points);
         
-        double GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2);
+        long double GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2);
         const auto& GetDistanceMatrix() const { return distanceMatrix; }
 
+        long double ToRadians(const long double& degree);
     private:
-        std::vector<std::vector<double>> distanceMatrix;
+        std::vector<std::vector<long double>> distanceMatrix;
 };
 
 #endif

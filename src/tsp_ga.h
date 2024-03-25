@@ -10,6 +10,8 @@ class TspGa{
     public:
         TspGa();
 
+        auto GetPoints() -> std::vector<Point>&;
+
         void InitPopulation();
         void Solve();
 

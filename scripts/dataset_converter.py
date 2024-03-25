@@ -14,7 +14,7 @@ def write_names_to_csv(data, file_name):
             writer.writerow(name_data)
 
 def read_ndjson_and_write_to_csv(ndjson_data):
-    for idx, map_data in enumerate(ndjson_data, start=1):
+    for idx, map_data in enumerate(ndjson_data, start=0):
         location = map_data.get('location')
         name = map_data.get('name')
         if location and name:
@@ -22,8 +22,8 @@ def read_ndjson_and_write_to_csv(ndjson_data):
             write_coordinates_to_csv(idx, [[location[1], location[0]]], output_csv_file)
             write_names_to_csv([[idx, name]], output_names_file)
 
-output_csv_file = 'all_coordinates.csv'
-output_names_file = 'all_names.csv'
+output_csv_file = '../data/tsp81cities_coords.csv'
+output_names_file = '../data/tsp81cities_names.csv'
 
 with open(output_csv_file, mode='w', newline='') as file:
     writer = csv.writer(file)

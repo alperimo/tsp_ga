@@ -22,7 +22,6 @@ void Chromosome::CalculateFitnessScore(){
     for (unsigned int geneIndex = 0; geneIndex < genSize - 1; geneIndex++){
         auto distance = TspGa::distanceHelper.GetDistanceByPointIndex(genes[geneIndex], genes[geneIndex + 1]);
         this->fitnessScore += distance;
-        std::cout << "Distance between point index " << genes[geneIndex] << " and " << genes[geneIndex + 1] << ": " << distance << std::endl;
     }
 
     this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointIndex(genes[genSize - 1], genes[0]);

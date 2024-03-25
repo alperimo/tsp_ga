@@ -3,16 +3,16 @@
 
 class Point{
     public:
-        Point(int id_, float latitude_, float longitude_);
+        Point(int id_, long double latitude_, long double longitude_);
 
         int GetId() const;
-        float GetLatitude() const;
-        float GetLongitude() const;
+        long double GetLatitude() const;
+        long double GetLongitude() const;
 
     private:
         int id;
-        float latitude;
-        float longitude;
+        long double latitude;
+        long double longitude;
 };
 
 #endif

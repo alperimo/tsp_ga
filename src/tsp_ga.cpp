@@ -11,6 +11,10 @@ TspGa::TspGa(){
     // Constructor
 }
 
+auto TspGa::GetPoints() -> std::vector<Point>&{
+    return points;
+}
+
 void TspGa::InitPopulation(){
     std::cout << "Initializing Population" << std::endl;
 
@@ -24,6 +28,7 @@ void TspGa::InitPopulation(){
     std::cout << "Distance between point index 7 and 18: " << distanceHelper.GetDistanceByPointIndex(7, 18) << std::endl;
 
     std::cout << "Distance between point index 55 and 56: " << distanceHelper.GetDistanceByPointIndex(55, 56) << std::endl;
+    std::cout << "Distance between point index 50 and 81: " << distanceHelper.GetDistanceByPointIndex(50, 81) << std::endl;
 
     population.GenerateRandomInitialPopulation();
 }
@@ -31,12 +36,12 @@ void TspGa::InitPopulation(){
 void TspGa::Solve(){
     std::cout << "Running TspGa Solver using Genetic Algorithm" << std::endl;
 
-    /*population.SelectBestChromosomes();
+    population.SelectBestChromosomes();
     
     std::cout << "Best Chromosomes: " << std::endl;
     for (const auto& chromosome : population.GetPopulation()){
         chromosome.PrintGenes();
-        std::cout << std::endl << " Fitness Score: " << chromosome.CalculateFitnessScore() << std::endl;
+        std::cout << std::endl << " Fitness Score: " << chromosome.GetFitnessScore() << std::endl;
         std::cout << " -------------------------------------- " << std::endl;
-    }*/
+    }
 }

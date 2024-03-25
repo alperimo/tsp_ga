@@ -6,23 +6,30 @@ DistanceHelper::DistanceHelper(){
     // Constructor
 }
 
-double DistanceHelper::CalculateDistance(const Point& point1, const Point& point2){
-    auto point1Lat = point1.GetLatitude(), point1Lon = point1.GetLongitude();
-    auto point2Lat = point2.GetLatitude(), point2Lon = point2.GetLongitude();
+long double DistanceHelper::ToRadians(const long double& degree){
+    return degree * (M_PI / 180.0);
+}
 
-    auto dLat = (point2Lat - point1Lat) * M_PI / 180.0;
-    auto dLon = (point2Lon - point1Lon) * M_PI / 180.0;
+long double DistanceHelper::CalculateDistance(const Point& point1, const Point& point2){
+    auto point1Lat = ToRadians(point1.GetLatitude()), point1Lon = ToRadians(point1.GetLongitude());
+    auto point2Lat = ToRadians(point2.GetLatitude()), point2Lon = ToRadians(point2.GetLongitude());
 
-    auto a = sin(dLat / 2) * sin(dLat / 2) + cos(point1Lat * M_PI / 180.0) * cos(point2Lat * M_PI / 180.0) * sin(dLon / 2) * sin(dLon / 2);
-    auto c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    
-    return 6371 * c;
+    // Harvesine formula
+    auto dLat = point2Lat - point1Lat;
+    auto dLon = point2Lon - point1Lon;
+
+    long double ans = pow(sin(dLat / 2), 2) + cos(point1Lat) * cos(point2Lat) * pow(sin(dLon / 2), 2);
+    ans = 2 * asin(sqrt(ans));
+
+    // Distance in kilometers
+    auto km = ans * RADIO_TIERRA;
+    return km;
 }
 
 void DistanceHelper::CreateDistanceMatrixFromPoints(const std::vector<Point>& points) {
     auto totalPoints = points.size();
     
-    this->distanceMatrix = std::vector<std::vector<double>>(totalPoints, std::vector<double>(totalPoints, 0.0));
+    this->distanceMatrix = std::vector<std::vector<long double>>(totalPoints, std::vector<long double>(totalPoints, 0.0));
     
     for (unsigned int i = 0; i < totalPoints; i++) {
         for (unsigned int j = 0; j < totalPoints; j++) {
@@ -35,6 +42,6 @@ void DistanceHelper::CreateDistanceMatrixFromPoints(const std::vector<Point>& po
     }
 }
 
-double DistanceHelper::GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2){
+long double DistanceHelper::GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2){
     return this->distanceMatrix[pointIndex1][pointIndex2];
 }
