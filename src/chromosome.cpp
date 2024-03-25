@@ -36,5 +36,5 @@ void Chromosome::PrintGenes() const{
 }
 
 void Chromosome::ShuffleGenes(){
-    std::shuffle(genes.begin(), genes.end(), std::mt19937(std::random_device{}()));
+    std::shuffle(genes.begin() + 1, genes.end() - 1, std::mt19937(std::random_device{}()));
 }

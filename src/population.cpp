@@ -25,10 +25,18 @@ void Population::ClearPopulation(){
 void Population::GenerateRandomInitialPopulation(){
     this->ClearPopulation();
 
+    auto startPointIndex = TspGa::config.startPointIndex;
+
     Chromosome chromosome;
+    chromosome.AddGene(startPointIndex);
     for (unsigned int geneIndex = 0; geneIndex < TspGa::config.chromosomeSize; geneIndex++){
+        if (geneIndex == startPointIndex){
+            continue;
+        }
+
         chromosome.AddGene(geneIndex);
     }
+    chromosome.AddGene(startPointIndex);
 
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){
         chromosome.ShuffleGenes();
