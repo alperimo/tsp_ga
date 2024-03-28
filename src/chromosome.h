@@ -14,7 +14,7 @@ class Chromosome{
 
         long double GetFitnessScore() const { return fitnessScore; }
         unsigned int GetGene(const unsigned int& index) const { return genes[index]; }
-        unsigned int GetGenSize() const { return static_cast<unsigned int>(genes.size()); }
+        unsigned int GetSize() const { return static_cast<unsigned int>(genes.size()); }
 
         void PrintGenes() const;
         void ShuffleGenes();

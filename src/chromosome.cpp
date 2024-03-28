@@ -17,14 +17,14 @@ void Chromosome::AddGene(unsigned int gene){
 
 void Chromosome::CalculateFitnessScore(){
     this->fitnessScore = 0.0;
-    auto genSize = GetGenSize();
+    auto size = GetSize();
 
-    for (unsigned int geneIndex = 0; geneIndex < genSize - 1; geneIndex++){
+    for (unsigned int geneIndex = 0; geneIndex < size - 1; geneIndex++){
         auto distance = TspGa::distanceHelper.GetDistanceByPointIndex(genes[geneIndex], genes[geneIndex + 1]);
         this->fitnessScore += distance;
     }
 
-    this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointIndex(genes[genSize - 1], genes[0]);
+    this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointIndex(genes[size - 1], genes[0]);
 
     std::cout << "Fitness Score: " << this->fitnessScore << std::endl;
 }

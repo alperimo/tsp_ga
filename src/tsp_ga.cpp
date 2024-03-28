@@ -37,7 +37,7 @@ void TspGa::Solve(){
     std::cout << "Running TspGa Solver using Genetic Algorithm" << std::endl;
 
     population.SelectBestChromosomes();
-    
+
     std::cout << "Best Chromosomes: " << std::endl;
     for (const auto& chromosome : population.GetPopulation()){
         chromosome.PrintGenes();
