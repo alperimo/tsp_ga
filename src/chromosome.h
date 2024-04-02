@@ -13,11 +13,13 @@ class Chromosome{
         void CalculateFitnessScore();
 
         long double GetFitnessScore() const { return fitnessScore; }
-        unsigned int GetGene(const unsigned int& index) const { return genes[index]; }
+        unsigned int GetGene(const unsigned int& index) const { return genes.at(index); } 
         unsigned int GetSize() const { return static_cast<unsigned int>(genes.size()); }
 
         void PrintGenes() const;
         void ShuffleGenes();
+
+        void SetGene(const unsigned int& index, const unsigned int& gene) { genes.at(index) = gene; }
 
     private:
         std::vector<unsigned int> genes;
