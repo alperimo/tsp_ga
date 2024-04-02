@@ -12,12 +12,14 @@ class Population{
         void CalculateFitnessScores();
         void ClearPopulation();
         void GenerateRandomInitialPopulation();
-        const auto& GetPopulation() const { return population; }
+
+        const auto& GetChromosome(const unsigned int& index) const { return chromosomes.at(index); }
+        const auto& GetChromosomes() const { return chromosomes; }
 
         void SelectBestChromosomes();
 
     private:
-        std::vector<Chromosome> population;
+        std::vector<Chromosome> chromosomes;
 };
 
 #endif

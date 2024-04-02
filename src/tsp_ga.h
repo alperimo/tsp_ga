@@ -5,6 +5,7 @@
 #include "distance_helper.h"
 #include "tsp_ga_config.h"
 #include "population.h"
+#include "crossover.h"
 
 class TspGa{
     public:
@@ -17,6 +18,7 @@ class TspGa{
 
         static TspGaConfig config;
         static DistanceHelper distanceHelper;
+        static Crossover crossover;
 
     private:
         FileReader fileReader;
