@@ -33,8 +33,10 @@ void Chromosome::PrintGenes() const{
     for (auto gene : genes){
         std::cout << gene << " ";
     }
+
+    std::cout << genes.at(0) << " ";
 }
 
 void Chromosome::ShuffleGenes(){
-    std::shuffle(genes.begin() + 1, genes.end() - 1, std::mt19937(std::random_device{}()));
+    std::shuffle(genes.begin() + 1, genes.end(), std::mt19937(std::random_device{}()));
 }
