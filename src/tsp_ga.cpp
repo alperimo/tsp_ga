@@ -56,4 +56,16 @@ void TspGa::Solve(){
     std::cout << "Offspring 2: ";
     offSprings.second.PrintGenes();
     std::cout << std::endl;
+
+    std::cout << "Applying order based crossover to best two chromosomes" << std::endl;
+    offSprings = Crossover::ApplyOrderBased(population.GetChromosome(0), population.GetChromosome(1));
+    
+    std::cout << "Offspring 1: ";
+    offSprings.first.PrintGenes();
+    std::cout << std::endl;
+
+    std::cout << "Offspring 2: ";
+    offSprings.second.PrintGenes();
+    std::cout << std::endl;
+
 }

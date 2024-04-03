@@ -38,8 +38,6 @@ void Population::GenerateRandomInitialPopulation(){
         chromosome.AddGene(geneIndex);
     }
 
-    chromosome.AddGene(startPointIndex);
-
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){
         chromosome.ShuffleGenes();
         std::cout << "Chromosome " << chromosomeIndex << ": ";
