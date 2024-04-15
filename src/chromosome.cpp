@@ -4,7 +4,9 @@
 #include <random>
 #include <iostream>
 
-Chromosome::Chromosome(){}
+Chromosome::Chromosome(const unsigned int& size){
+    genes = std::vector<unsigned int>(size);
+}
 
 Chromosome::Chromosome(const std::vector<unsigned int>& genes_) : genes(genes_)
 {

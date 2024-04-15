@@ -14,6 +14,7 @@ class Crossover{
 
         static auto ApplyPartiallyMapped(const Chromosome& chromosome1, const Chromosome& chromosome2) -> std::pair<Chromosome, Chromosome>;
         static auto ApplyOrderBased(const Chromosome& chromosome1, const Chromosome& chromosome2) -> std::pair<Chromosome, Chromosome>;
+        static auto ApplyCycleBased(const Chromosome& chromosome1, const Chromosome& chromosome2) -> std::pair<Chromosome, Chromosome>;
 
         static auto GetTwoCrossoverPointIndices(const unsigned int& chromosomeSize) -> std::pair<unsigned int, unsigned int>;
 };
