@@ -177,7 +177,8 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
             priorChrGenPositions[priorChromosome.GetGene(geneIndex)] = geneIndex;
         }
 
-        auto startGene, currentGeneIndex = priorChromosome.GetGene(1), 1;
+        auto startGene = priorChromosome.GetGene(1);
+        auto currentGeneIndex = 1u;
         
         // To prevent the beginnings which have already cycle when genes in the starting index (1) are same. 
         while (startGene == otherChromosome.GetGene(currentGeneIndex)){
@@ -201,9 +202,9 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
         }
 
         auto childChromosomeGenes = childChromosome.GetGenes();
-        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&childChromosomeGenes, &otherChromosome](auto& gene){
+        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&childChromosomeGenes, &otherChromosome](unsigned int& gene){
             if (gene == 0){
-                auto geneIndex = &gene - &childChromosomeGenes[0];
+                auto geneIndex = static_cast<unsigned int>(&gene - &childChromosomeGenes.front());
                 gene = otherChromosome.GetGene(geneIndex);
             }
         });
@@ -212,6 +213,9 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
     };
 
     auto childChromosome1 = generateChildChromosome(chromosome1, chromosome2);
+    auto childChromosome2 = generateChildChromosome(chromosome2, chromosome1);
+
+    return std::make_pair(childChromosome1, childChromosome2);
 }
 
 auto Crossover::GetTwoCrossoverPointIndices(const unsigned int& chromosomeSize) -> std::pair<unsigned int, unsigned int>{
