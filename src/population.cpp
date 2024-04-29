@@ -3,23 +3,24 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include "crossover.h"
 
 Population::Population(){
     // Constructor
 }
 
 void Population::AddChromosome(const Chromosome& chromosome){
-    population.push_back(chromosome);
+    chromosomes.push_back(chromosome);
 }
 
 void Population::CalculateFitnessScores(){
-    for (auto& chromosome : population){
+    for (auto& chromosome : chromosomes){
         chromosome.CalculateFitnessScore();
     }
 }
 
 void Population::ClearPopulation(){
-    population.clear();
+    chromosomes.clear();
 }
 
 void Population::GenerateRandomInitialPopulation(){
@@ -36,7 +37,6 @@ void Population::GenerateRandomInitialPopulation(){
 
         chromosome.AddGene(geneIndex);
     }
-    chromosome.AddGene(startPointIndex);
 
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){
         chromosome.ShuffleGenes();
@@ -54,11 +54,11 @@ void Population::GenerateRandomInitialPopulation(){
 void Population::SelectBestChromosomes(){
     std::cout << "Selecting Best Chromosomes" << std::endl;
 
-    std::sort(population.begin(), population.end(), [](const Chromosome& c1, const Chromosome& c2){
+    std::sort(chromosomes.begin(), chromosomes.end(), [](const Chromosome& c1, const Chromosome& c2){
         return c1.GetFitnessScore() < c2.GetFitnessScore();
     });
 
-    const double eraseSize = static_cast<double>(population.size()) * TspGa::config.bestChromosomesPct;
-    auto firstIndexToRemove = static_cast<decltype(population.begin())::difference_type>(eraseSize);
-    population.erase(population.begin() + firstIndexToRemove, population.end());
+    const double eraseSize = static_cast<double>(chromosomes.size()) * TspGa::config.bestChromosomesPct;
+    auto firstIndexToRemove = static_cast<decltype(chromosomes.begin())::difference_type>(eraseSize);
+    chromosomes.erase(chromosomes.begin() + firstIndexToRemove, chromosomes.end());
 }

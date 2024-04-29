@@ -8,7 +8,7 @@ DistanceHelper::DistanceHelper(){
 
 long double DistanceHelper::ToRadians(const long double& degree){
     return degree * (M_PI / 180.0);
-}
+}   
 
 long double DistanceHelper::CalculateDistance(const Point& point1, const Point& point2){
     auto point1Lat = ToRadians(point1.GetLatitude()), point1Lon = ToRadians(point1.GetLongitude());

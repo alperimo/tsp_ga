@@ -5,7 +5,7 @@
 
 class Chromosome{
     public:
-        Chromosome();
+        Chromosome(const unsigned int& size = 0);
         Chromosome(const std::vector<unsigned int>& genes);
 
         void AddGene(unsigned int gene);
@@ -13,11 +13,17 @@ class Chromosome{
         void CalculateFitnessScore();
 
         long double GetFitnessScore() const { return fitnessScore; }
-        unsigned int GetGene(const unsigned int& index) const { return genes[index]; }
-        unsigned int GetGenSize() const { return static_cast<unsigned int>(genes.size()); }
+        unsigned int GetGene(const unsigned int& index) const { return genes.at(index); }
+        std::vector<unsigned int>& GetGenes() { return genes; };
+        unsigned int GetSize() const { return static_cast<unsigned int>(genes.size()); }
 
         void PrintGenes() const;
         void ShuffleGenes();
+
+        void SetGene(const unsigned int& index, const unsigned int& gene) { genes.at(index) = gene; }
+
+        auto begin() -> std::vector<unsigned int>::iterator { return genes.begin(); }
+        auto end() -> std::vector<unsigned int>::iterator { return genes.end(); }
 
     private:
         std::vector<unsigned int> genes;
