@@ -145,10 +145,10 @@ auto Crossover::ApplyOrderBased(const Chromosome& chromosome1, const Chromosome&
             if (genesMapBetweenCrossoverPoints.find(geneOfOtherOffspring) == genesMapBetweenCrossoverPoints.end()){
                 childChromosome.SetGene(offspringGeneIndex, geneOfOtherOffspring);
                 transferredGeneCount++;
-                std::cout << "otherOffspringGeneIndex: " << otherOffspringGeneIndex << ", Transferred Gene: " << geneOfOtherOffspring << " to offspringGeneIndex: " << offspringGeneIndex << ", transferredGeneCount: " << transferredGeneCount << std::endl;
+                //std::cout << "otherOffspringGeneIndex: " << otherOffspringGeneIndex << ", Transferred Gene: " << geneOfOtherOffspring << " to offspringGeneIndex: " << offspringGeneIndex << ", transferredGeneCount: " << transferredGeneCount << std::endl;
                 offspringGeneIndex++;
             }else{
-                std::cout << "otherOffspringGeneIndex: " << otherOffspringGeneIndex << ", Gene: " << geneOfOtherOffspring << " is between crossover points, so will be skipped" << std::endl;
+                //std::cout << "otherOffspringGeneIndex: " << otherOffspringGeneIndex << ", Gene: " << geneOfOtherOffspring << " is between crossover points, so will be skipped" << std::endl;
             }
             
             otherOffspringGeneIndex++;
