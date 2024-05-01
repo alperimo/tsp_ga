@@ -51,6 +51,7 @@ void Population::GenerateRandomInitialPopulation(){
     this->CalculateFitnessScores();
 }
 
+// TODO: Keep also some of the worst chromosomes to maintain diversity
 void Population::SelectBestChromosomes(){
     std::cout << "Selecting Best Chromosomes..." << std::endl;
 
