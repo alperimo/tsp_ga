@@ -52,7 +52,7 @@ void Population::GenerateRandomInitialPopulation(){
 }
 
 void Population::SelectBestChromosomes(){
-    std::cout << "Selecting Best Chromosomes" << std::endl;
+    std::cout << "\nSelecting Best Chromosomes" << std::endl;
 
     std::sort(chromosomes.begin(), chromosomes.end(), [](const Chromosome& c1, const Chromosome& c2){
         return c1.GetFitnessScore() < c2.GetFitnessScore();

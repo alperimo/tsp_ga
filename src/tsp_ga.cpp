@@ -6,6 +6,8 @@
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
+static int maxGen = TspGa::config.maxGenerations;
+Chromosome bestChromosome = NULL;
 
 TspGa::TspGa(){
     // Constructor
@@ -31,41 +33,98 @@ void TspGa::InitPopulation(){
     std::cout << "Distance between point index 50 and 81: " << distanceHelper.GetDistanceByPointIndex(50, 81) << std::endl;
 
     population.GenerateRandomInitialPopulation();
+    bestChromosome = population.GetChromosome(0);
 }
 
 void TspGa::Solve(){
-    std::cout << "Running TspGa Solver using Genetic Algorithm" << std::endl;
+
+    Population populationOffspring;
+
+    std::cout << "Remaning Generations: " << maxGen << std::endl;
+    if (maxGen == 0){
+        std::cout << "Number of maximum generations have been reached. Exiting..." << std::endl;
+        std::cout << "\nBest Solution: " << bestChromosome.GetFitnessScore() <<std::endl;
+        bestChromosome.PrintGenes();   
+        exit(0);
+    }
 
     population.SelectBestChromosomes();
-
+    if (population.GetSize() < 4){
+        std::cout << "No more chromosomes to crossover. Exiting..." << std::endl;
+        std::cout << "\nBest Solution: " << population.GetChromosome(0).GetFitnessScore() << std::endl;
+        population.GetChromosome(0).PrintGenes(); 
+        exit(0);
+    }
+    std::cout << "Population Size: " << population.GetSize() << std::endl;
+    
+    /*
     std::cout << "Best Chromosomes: " << std::endl;
     for (const auto& chromosome : population.GetChromosomes()){
         chromosome.PrintGenes();
         std::cout << std::endl << " Fitness Score: " << chromosome.GetFitnessScore() << std::endl;
         std::cout << " -------------------------------------- " << std::endl;
     }
+    */
 
-    // Test Crossover for the best two chromosomes
-    std::cout << "Applying partially mapped crossover to best two chromosomes" << std::endl;
-    auto offSprings = Crossover::ApplyPartiallyMapped(population.GetChromosome(0), population.GetChromosome(1));
+    // Partially mapped crossover where 2 crossover happens with each chromosome
+    for (int i = 0; i < population.GetSize()-2; i += 1) {
+        std::cout << "\nApplying partially mapped crossover" << std::endl;
+
+        // Apply partially mapped crossover to chromosome i and chromosome i+1
+        auto offSprings1 = Crossover::ApplyPartiallyMapped(population.GetChromosome(i), population.GetChromosome(i + 1));
+        std::cout << std::endl;
+
+        // Calculate fitness for offspring 1
+        offSprings1.first.CalculateFitnessScore();
+        offSprings1.second.CalculateFitnessScore();
+
+        // Apply partially mapped crossover to chromosome i and chromosome i+2
+        auto offSprings2 = Crossover::ApplyPartiallyMapped(population.GetChromosome(i), population.GetChromosome(i + 2));
+        std::cout << std::endl;
+
+        // Calculate fitness for offspring 2
+        offSprings2.first.CalculateFitnessScore();
+        offSprings2.second.CalculateFitnessScore();
+
+        // Choose the better offspring from each pair
+        if (offSprings1.first.GetFitnessScore() < offSprings1.second.GetFitnessScore()) {
+            std::cout << "Best Offspring Fitness Score from Pair " << i + 1 << ": " << offSprings1.first.GetFitnessScore() << std::endl;
+            
+            populationOffspring.AddChromosome(offSprings1.first);
+            if(offSprings1.first.GetFitnessScore() < bestChromosome.GetFitnessScore()){
+                bestChromosome = offSprings1.first;
+            }
+        } else {
+            std::cout << "Best Offspring Fitness Score from Pair " << i + 1 << ": " << offSprings1.second.GetFitnessScore() << std::endl;
+            populationOffspring.AddChromosome(offSprings1.second);
+            if(offSprings1.second.GetFitnessScore() < bestChromosome.GetFitnessScore()){
+                bestChromosome = offSprings1.second;
+            }
+        }
+        if (offSprings2.first.GetFitnessScore() < offSprings2.second.GetFitnessScore()) {
+            std::cout << "Best Offspring Fitness Score from Pair " << i + 2 << ": " << offSprings2.first.GetFitnessScore() << std::endl;
+            offSprings2.first.GetFitnessScore();
+            populationOffspring.AddChromosome(offSprings2.first);
+            if(offSprings2.first.GetFitnessScore() < bestChromosome.GetFitnessScore()){
+                bestChromosome = offSprings2.first;
+            }
+        } else {
+            std::cout << "Best Offspring Fitness Score from Pair " << i + 2 << ": " << offSprings2.second.GetFitnessScore() << std::endl;
+            offSprings2.second.GetFitnessScore();
+            populationOffspring.AddChromosome(offSprings2.second);
+            if(offSprings2.second.GetFitnessScore() < bestChromosome.GetFitnessScore()){
+                bestChromosome = offSprings2.second;
+            }
+        }
+        std::cout << "Best Solution within this population: " << population.GetChromosome(0).GetFitnessScore() << std::endl;
+    }
     
-    std::cout << "Offspring 1: ";
-    offSprings.first.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Offspring 2: ";
-    offSprings.second.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Applying order based crossover to best two chromosomes" << std::endl;
-    offSprings = Crossover::ApplyOrderBased(population.GetChromosome(0), population.GetChromosome(1));
+    maxGen -= 1;
     
-    std::cout << "Offspring 1: ";
-    offSprings.first.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Offspring 2: ";
-    offSprings.second.PrintGenes();
-    std::cout << std::endl;
-
+    population.ClearPopulation();
+    for(auto& chromosome : populationOffspring.GetChromosomes()){
+        population.AddChromosome(chromosome);
+    }
+    populationOffspring.ClearPopulation();
+    TspGa::Solve(); 
 }

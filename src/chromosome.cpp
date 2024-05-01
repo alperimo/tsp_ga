@@ -27,8 +27,6 @@ void Chromosome::CalculateFitnessScore(){
     }
 
     this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointIndex(genes[size - 1], genes[0]);
-
-    std::cout << "Fitness Score: " << this->fitnessScore << std::endl;
 }
 
 void Chromosome::PrintGenes() const{

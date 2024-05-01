@@ -15,6 +15,7 @@ class Population{
 
         const auto& GetChromosome(const unsigned int& index) const { return chromosomes.at(index); }
         const auto& GetChromosomes() const { return chromosomes; }
+        int GetSize() const { return chromosomes.size(); }
 
         void SelectBestChromosomes();
 
