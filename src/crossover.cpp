@@ -103,6 +103,14 @@ auto Crossover::ApplyPartiallyMapped(const Chromosome& chromosome1, const Chromo
     return std::make_pair(childChromosome1, childChromosome2);
 }
 
+/*
+    1 5 9 3 7 4 6 2 8 -> 1 5 9 | 3 7 4 | 6 2 8 -> x x x | 3 7 4 | x x x
+    3 8 2 5 1 6 9 7 4 -> 3 8 2 | 5 1 6 | 9 7 4 -> y y y | 5 1 6 | y1 y2 y3
+
+    Transfer the genes in the second chromosome that are not between the crossover points of the first chromosome to the first chromosome
+    by starting most-right side of second crossover point of the second (index of y1 represented by offspringGeneIndex) until we reach 
+    the left side of the first crossover point of the first chromosome. 
+*/
 auto Crossover::ApplyOrderBased(const Chromosome& chromosome1, const Chromosome& chromosome2) -> std::pair<Chromosome, Chromosome>{
     auto chromosomeSize = chromosome1.GetSize();
 
@@ -140,7 +148,7 @@ auto Crossover::ApplyOrderBased(const Chromosome& chromosome1, const Chromosome&
                 offspringGeneIndex = 1;
             }
 
-            // If the gene of otherOffspring is not between the crossover points of offspring, change it with the gene in the other offspring
+            // If the gene of otherOffspring is not between the crossover points of offspring, transfer it with the gene in the same index of offspring
             auto geneOfOtherOffspring = otherOffspring.GetGene(otherOffspringGeneIndex);
             if (genesMapBetweenCrossoverPoints.find(geneOfOtherOffspring) == genesMapBetweenCrossoverPoints.end()){
                 childChromosome.SetGene(offspringGeneIndex, geneOfOtherOffspring);
@@ -201,11 +209,15 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
             }
         }
 
-        auto childChromosomeGenes = childChromosome.GetGenes();
-        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&childChromosomeGenes, &otherChromosome](unsigned int& gene){
-            if (gene == 0){
-                auto geneIndex = static_cast<unsigned int>(&gene - &childChromosomeGenes.front());
-                gene = otherChromosome.GetGene(geneIndex);
+        auto& childChromosomeGenes = childChromosome.GetGenes();
+        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&childChromosomeGenes, &childChromosome, &priorChromosome, &otherChromosome](unsigned int& gene){
+            auto geneIndex = static_cast<unsigned int>(&gene - &childChromosomeGenes.front());
+            /* 
+                We consider genes with 0 value as empty, so we fill them with the genes in the other chromosome.
+                BUT! If the gene value already was 0 in the prior chromosome, we don't change it because its already filled with 0 as gen value!
+            */
+            if (childChromosome.GetGene(geneIndex) == 0 && priorChromosome.GetGene(geneIndex) != 0){
+                childChromosome.SetGene(geneIndex, otherChromosome.GetGene(geneIndex));
             }
         });
 

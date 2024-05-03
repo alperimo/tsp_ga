@@ -38,9 +38,72 @@ void TspGa::InitPopulation(){
 }
 
 void TspGa::Solve(){
-
     Population generation;
     Population populationOffspring;
 
     generation.GenerateGenerations(maxGen, bestChromosome, population, populationOffspring);
+
+    TestCrossovers();
+}
+
+// TODO: Just for tests, remove this function later.
+void TspGa::TestCrossovers(){
+    std::cout << "Testing Crossovers" << std::endl;
+    
+    Population generation;
+    population.SelectBestChromosomes();
+
+    std::cout << "Best Chromosomes: " << std::endl;
+    for (const auto& chromosome : population.GetChromosomes()){
+        chromosome.PrintGenes();
+        std::cout << std::endl << " Fitness Score: " << chromosome.GetFitnessScore() << std::endl;
+        std::cout << " -------------------------------------- " << std::endl;
+    }
+
+    // Test Crossover for the best two chromosomes
+    std::cout << "Applying partially mapped crossover to best two chromosomes" << std::endl;
+    auto offSprings = Crossover::ApplyPartiallyMapped(population.GetChromosome(0), population.GetChromosome(1));
+    
+    std::cout << "Offspring 1: ";
+    offSprings.first.PrintGenes();
+    std::cout << std::endl;
+
+    std::cout << "Offspring 2: ";
+    offSprings.second.PrintGenes();
+    std::cout << std::endl;
+
+    // Test for order based crossover
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "Applying order based crossover to best two chromosomes" << std::endl;
+    offSprings = Crossover::ApplyOrderBased(population.GetChromosome(0), population.GetChromosome(1));
+    
+    std::cout << "Offspring 1: ";
+    offSprings.first.PrintGenes();
+    std::cout << std::endl;
+
+    std::cout << "Offspring 2: ";
+    offSprings.second.PrintGenes();
+    std::cout << std::endl;
+
+    // Test for cycle crossover
+    std::cout << "------------------------------------------------" << std::endl;
+    std::cout << "Applying cycle crossover to best two chromosomes" << std::endl;
+
+    std::cout << "Parent 1: ";
+    population.GetChromosome(0).PrintGenes();
+    std::cout << std::endl;
+
+    std::cout << "Parent 2: ";
+    population.GetChromosome(1).PrintGenes();
+    std::cout << std::endl;
+
+    offSprings = Crossover::ApplyCycleBased(population.GetChromosome(0), population.GetChromosome(1));
+
+    std::cout << "Offspring 1: ";
+    offSprings.first.PrintGenes();
+    std::cout << std::endl;
+
+    std::cout << "Offspring 2: ";
+    offSprings.second.PrintGenes();
+    std::cout << std::endl;
 }

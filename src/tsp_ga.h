@@ -16,6 +16,8 @@ class TspGa{
         void InitPopulation();
         void Solve();
 
+        void TestCrossovers();
+
         static TspGaConfig config;
         static DistanceHelper distanceHelper;
         static Crossover crossover;
