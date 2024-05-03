@@ -1,11 +1,14 @@
 #include <iostream>
 #include "tsp_ga.h"
+#include "population.h"
 #include <array>
 #include <algorithm>
 #include <random>
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
+static int maxGen = TspGa::config.maxGenerations;
+Chromosome bestChromosome;
 
 TspGa::TspGa(){
     // Constructor
@@ -31,41 +34,13 @@ void TspGa::InitPopulation(){
     std::cout << "Distance between point index 50 and 81: " << distanceHelper.GetDistanceByPointIndex(50, 81) << std::endl;
 
     population.GenerateRandomInitialPopulation();
+    bestChromosome = population.GetChromosome(0); //Random chromosome
 }
 
 void TspGa::Solve(){
-    std::cout << "Running TspGa Solver using Genetic Algorithm" << std::endl;
 
-    population.SelectBestChromosomes();
+    Population generation;
+    Population populationOffspring;
 
-    std::cout << "Best Chromosomes: " << std::endl;
-    for (const auto& chromosome : population.GetChromosomes()){
-        chromosome.PrintGenes();
-        std::cout << std::endl << " Fitness Score: " << chromosome.GetFitnessScore() << std::endl;
-        std::cout << " -------------------------------------- " << std::endl;
-    }
-
-    // Test Crossover for the best two chromosomes
-    std::cout << "Applying partially mapped crossover to best two chromosomes" << std::endl;
-    auto offSprings = Crossover::ApplyPartiallyMapped(population.GetChromosome(0), population.GetChromosome(1));
-    
-    std::cout << "Offspring 1: ";
-    offSprings.first.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Offspring 2: ";
-    offSprings.second.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Applying order based crossover to best two chromosomes" << std::endl;
-    offSprings = Crossover::ApplyOrderBased(population.GetChromosome(0), population.GetChromosome(1));
-    
-    std::cout << "Offspring 1: ";
-    offSprings.first.PrintGenes();
-    std::cout << std::endl;
-
-    std::cout << "Offspring 2: ";
-    offSprings.second.PrintGenes();
-    std::cout << std::endl;
-
+    generation.GenerateGenerations(maxGen, bestChromosome, population, populationOffspring);
 }
