@@ -73,10 +73,10 @@ void Population::GenerateGenerations(Population& population){
     auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, TspGa::config.maxGenerations); 
     auto& bestChromosome = TspGa::bestChromosome;
 
-    Population populationOffspring;
-
     auto doCrossovers = [&]{
         std::cout << "Population Size: " << population.GetSize() << std::endl;
+
+        Population populationOffspring;
         
         // TODO: Try to use std::tuple instead of OffspringPair struct with cpp17+ [Now we get structured bindings error with std::tuple<std::pair<...>, std::pair<...>>]
         struct OffspringPair {
@@ -112,7 +112,7 @@ void Population::GenerateGenerations(Population& population){
             chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
         }
 
-        population = populationOffspring;
+        population = std::move(populationOffspring);
         createdGenerationCount++; 
         
         std::cout << std::endl << "Remaning Generations: " << maxGenerations - createdGenerationCount << std::endl;
