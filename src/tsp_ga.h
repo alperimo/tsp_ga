@@ -22,6 +22,8 @@ class TspGa{
         static DistanceHelper distanceHelper;
         static Crossover crossover;
 
+        static Chromosome bestChromosome;
+
     private:
         FileReader fileReader;
 

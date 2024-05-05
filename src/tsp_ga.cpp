@@ -7,8 +7,7 @@
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
-static int maxGen = TspGa::config.maxGenerations;
-Chromosome bestChromosome;
+Chromosome TspGa::bestChromosome;
 
 TspGa::TspGa(){
     // Constructor
@@ -34,14 +33,12 @@ void TspGa::InitPopulation(){
     std::cout << "Distance between point index 50 and 81: " << distanceHelper.GetDistanceByPointIndex(50, 81) << std::endl;
 
     population.GenerateRandomInitialPopulation();
-    bestChromosome = population.GetChromosome(0); //Random chromosome
 }
 
 void TspGa::Solve(){
     Population generation;
-    Population populationOffspring;
-
-    generation.GenerateGenerations(maxGen, bestChromosome, population, populationOffspring);
+    
+    generation.GenerateGenerations(population);
 
     TestCrossovers();
 }
