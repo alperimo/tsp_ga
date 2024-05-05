@@ -4,6 +4,7 @@
 #include <array>
 #include <algorithm>
 #include <random>
+#include <tuple>
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
@@ -35,12 +36,40 @@ void TspGa::InitPopulation(){
     population.GenerateRandomInitialPopulation();
 }
 
-void TspGa::Solve(){
-    Population generation;
-    
-    generation.GenerateGenerations(population);
+void TspGa::CreateGenerations(Population& parentPopulation){
+    auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, TspGa::config.maxGenerations);
 
+    while (parentPopulation.GetSize() > 4){
+        parentPopulation.SelectBestChromosomes();
+
+        std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << parentPopulation.GetChromosome(0).GetFitnessScore() << std::endl;
+
+        if (bestChromosome.GetSize() == 0 || parentPopulation.GetChromosome(0).GetFitnessScore() < bestChromosome.GetFitnessScore()){
+            bestChromosome = parentPopulation.GetChromosome(0);
+        }
+
+        parentPopulation = std::move(parentPopulation.GenerateSubPopulation());
+        parentPopulation.CalculateFitnessScores();
+
+        createdGenerationCount++;
+        
+        if (createdGenerationCount == maxGenerations){
+            std::cout << "Number of maximum generations have been reached." << std::endl << std::endl;
+            std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() <<std::endl;
+            bestChromosome.PrintGenes();
+            return;
+        }
+    }
+
+    std::cout << "There are no any enough chromosomes to crossover..." << std::endl;
+    std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() << std::endl;
+    bestChromosome.PrintGenes();
+}
+
+void TspGa::Solve(){    
     TestCrossovers();
+
+    CreateGenerations(this->population);
 }
 
 // TODO: Just for tests, remove this function later.

@@ -18,7 +18,7 @@ class Population{
         const auto GetSize() const { return chromosomes.size(); }
 
         void SelectBestChromosomes();
-        void GenerateGenerations(Population& population);
+        auto GenerateSubPopulation() -> Population;
 
     private:
         std::vector<Chromosome> chromosomes;

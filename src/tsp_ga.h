@@ -14,6 +14,7 @@ class TspGa{
         auto GetPoints() -> std::vector<Point>&;
 
         void InitPopulation();
+        void CreateGenerations(Population& parentPopulation);
         void Solve();
 
         void TestCrossovers();

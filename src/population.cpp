@@ -69,71 +69,45 @@ void Population::SelectBestChromosomes(){
     }
 }
 
-void Population::GenerateGenerations(Population& population){
-    auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, TspGa::config.maxGenerations); 
-    auto& bestChromosome = TspGa::bestChromosome;
+auto Population::GenerateSubPopulation() -> Population{
+    Population newPopulation;
 
-    auto doCrossovers = [&]{
-        std::cout << "Population Size: " << population.GetSize() << std::endl;
+    auto size = GetSize();
+    std::cout << "Population Size: " << size << std::endl;
 
-        Population populationOffspring;
-        
-        // TODO: Try to use std::tuple instead of OffspringPair struct with cpp17+ [Now we get structured bindings error with std::tuple<std::pair<...>, std::pair<...>>]
-        struct OffspringPair {
-            std::pair<Chromosome, Chromosome> offSprings1;
-            std::pair<Chromosome, Chromosome> offSprings2;
-        };
-
-        // Partially mapped crossover where 2 crossover happens with each chromosome
-        for (auto i = 0u; i < population.GetSize()-2; i += 1) {
-            auto createOffspringPairs = [&](const Chromosome& chromosome1, const Chromosome& chromosome2) -> OffspringPair{
-                auto offSprings1 = Crossover::ApplyPartiallyMapped(chromosome1, chromosome2);
-                auto offSprings2 = Crossover::ApplyPartiallyMapped(chromosome1, chromosome2);
-
-                offSprings1.first.CalculateFitnessScore();
-                offSprings1.second.CalculateFitnessScore();
-
-                offSprings2.first.CalculateFitnessScore();
-                offSprings2.second.CalculateFitnessScore();
-
-                std::cout << std::endl << std::endl;
-
-                return {offSprings1, offSprings2};
-            };
-
-            auto chooseAndAddBetterOffspring = [&](Chromosome& offspring1, Chromosome& offspring2){
-                auto& betterOffspring = offspring1.GetFitnessScore() <= offspring2.GetFitnessScore() ? offspring1 : offspring2;
-                populationOffspring.AddChromosome(betterOffspring);
-            };
-
-            auto [offSprings1, offSprings2] = createOffspringPairs(population.GetChromosome(i), population.GetChromosome(i+1));
-
-            chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
-            chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
-        }
-
-        population = std::move(populationOffspring);
-        createdGenerationCount++; 
-        
-        std::cout << std::endl << "Remaning Generations: " << maxGenerations - createdGenerationCount << std::endl;
+    // TODO: Try to use std::tuple instead of OffspringPair struct with cpp17+ [Now we get structured bindings error with std::tuple<std::pair<...>, std::pair<...>>]
+    struct OffspringPair {
+        std::pair<Chromosome, Chromosome> offSprings1;
+        std::pair<Chromosome, Chromosome> offSprings2;
     };
-    
-    while (population.GetSize() > 4){
-        population.SelectBestChromosomes();
-        doCrossovers();
-        population.CalculateFitnessScores();
-        
-        std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << population.GetChromosome(0).GetFitnessScore() << std::endl;
 
-        if (createdGenerationCount == maxGenerations){
-            std::cout << "Number of maximum generations have been reached. Exiting..." << std::endl;
-            std::cout << "\nBest Solution: " << bestChromosome.GetFitnessScore() <<std::endl;
-            bestChromosome.PrintGenes();
-            return;
-        }
+    // Partially mapped crossover where 2 crossover happens with each chromosome
+    auto createOffspringPairs = [&](const Chromosome& chromosome1, const Chromosome& chromosome2) -> OffspringPair{
+        auto offSprings1 = Crossover::ApplyPartiallyMapped(chromosome1, chromosome2);
+        auto offSprings2 = Crossover::ApplyPartiallyMapped(chromosome1, chromosome2);
+
+        offSprings1.first.CalculateFitnessScore();
+        offSprings1.second.CalculateFitnessScore();
+
+        offSprings2.first.CalculateFitnessScore();
+        offSprings2.second.CalculateFitnessScore();
+
+        std::cout << std::endl << std::endl;
+
+        return {offSprings1, offSprings2};
+    };
+
+    auto chooseAndAddBetterOffspring = [&](Chromosome& offspring1, Chromosome& offspring2){
+        auto& betterOffspring = offspring1.GetFitnessScore() <= offspring2.GetFitnessScore() ? offspring1 : offspring2;
+        newPopulation.AddChromosome(betterOffspring);
+    };
+
+    for (auto i = 0u; i < size-2; i++) {
+        auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(i+1));
+
+        chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
+        chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
     }
 
-    std::cout << "There are no any chromosomes to crossover..." << std::endl;
-    std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() << std::endl;
-    bestChromosome.PrintGenes(); 
+    return newPopulation;
 }
