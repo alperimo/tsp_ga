@@ -109,7 +109,7 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
                 }
             }
         }},
-        {CrossoverStrategy::BestToBest, [&](){
+        {CrossoverStrategy::SequentialPair, [&](){
             for (auto i = 0u; i < size-2; i++) {
                 auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(i+1));
 
@@ -117,9 +117,22 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
                 chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
             }
         }},
+        {CrossoverStrategy::ShuffledSequentialPair, [&](){
+            Shuffle();
+            for (auto i = 0u; i < size-2; i++) {
+                auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(i+1));
+
+                chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
+                chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
+            }
+        }}
     };
 
     funcsByStrategy[crossoverStrategy]();
 
     return newPopulation;
+}
+
+void Population::Shuffle(){
+    std::shuffle(chromosomes.begin(), chromosomes.end(), std::mt19937(std::random_device{}()));
 }

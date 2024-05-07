@@ -53,7 +53,7 @@ void TspGa::CreateGenerations(Population& parentPopulation){
             break;
         }
 
-        parentPopulation = std::move(parentPopulation.GenerateSubPopulation(CrossoverStrategy::BestToBest));
+        parentPopulation = std::move(parentPopulation.GenerateSubPopulation(CrossoverStrategy::ShuffledSequentialPair));
         parentPopulation.CalculateFitnessScores();
 
         createdGenerationCount++;

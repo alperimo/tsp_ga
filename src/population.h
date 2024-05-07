@@ -5,8 +5,9 @@
 #include "chromosome.h"
 
 enum class CrossoverStrategy{
-    BestToBest, // Each best two chromosomes will be crossed in order
-    EveryPair, // Every pair of chromosomes will be crossed
+    EveryPair, // Every pair of chromosomes will be crossed,
+    SequentialPair, // Each sequential pair of chromosomes will be crossed,
+    ShuffledSequentialPair // Populations will be shuffled first and then SequentialPair strategy will be applied
 };
 
 class Population{
@@ -24,6 +25,8 @@ class Population{
 
         void SelectBestChromosomes();
         auto GenerateSubPopulation(const CrossoverStrategy& crossoverStrategy) -> Population;
+
+        void Shuffle();
 
     private:
         std::vector<Chromosome> chromosomes;
