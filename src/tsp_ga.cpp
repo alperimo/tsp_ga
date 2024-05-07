@@ -36,6 +36,7 @@ void TspGa::InitPopulation(){
     population.GenerateRandomInitialPopulation();
 }
 
+// TODO: "Early stopping" criteria can be added to stop the algorithm if the fitness score is not improved for a certain number of generations.
 void TspGa::CreateGenerations(Population& parentPopulation){
     auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, config.maxGenerations);
 
@@ -44,10 +45,6 @@ void TspGa::CreateGenerations(Population& parentPopulation){
         auto parentPopulationSize = parentPopulation.GetSize();
 
         std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << parentPopulation.GetChromosome(0).GetFitnessScore() << " with Population Size: " << parentPopulationSize << std::endl;
-
-        if (bestChromosome.GetSize() == 0 || parentPopulation.GetChromosome(0).GetFitnessScore() < bestChromosome.GetFitnessScore()){
-            bestChromosome = parentPopulation.GetChromosome(0);
-        }
 
         if (parentPopulationSize < 4){
             break;

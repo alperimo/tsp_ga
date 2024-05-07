@@ -60,8 +60,14 @@ void Population::SelectBestChromosomes(){
         return c1.GetFitnessScore() < c2.GetFitnessScore();
     });
 
-    const double eraseSize = static_cast<double>(chromosomes.size()) * TspGa::config.bestChromosomesPct;
-    auto firstIndexToRemove = static_cast<decltype(chromosomes.begin())::difference_type>(eraseSize);
+    auto populationSize = GetSize();
+
+    const double bestSize = static_cast<double>(populationSize) * TspGa::config.bestChromosomesPct;
+    auto firstIndexOfRest = static_cast<decltype(chromosomes.begin())::difference_type>(bestSize);
+    std::shuffle(chromosomes.begin() + firstIndexOfRest, chromosomes.end(), std::mt19937(std::random_device{}()));
+    
+    const double restSize = static_cast<double>(populationSize - bestSize) * TspGa::config.restChromosomesPct;
+    auto firstIndexToRemove = firstIndexOfRest + static_cast<decltype(chromosomes.begin())::difference_type>(restSize);
     chromosomes.erase(chromosomes.begin() + firstIndexToRemove, chromosomes.end());
 
     if (TspGa::bestChromosome.GetSize() == 0 || GetChromosome(0).GetFitnessScore() < TspGa::bestChromosome.GetFitnessScore()){
