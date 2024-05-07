@@ -5,6 +5,8 @@
 #include <random>
 #include <tuple>
 #include "crossover.h"
+#include <functional>
+#include <map>
 
 Population::Population(){
     // Constructor
@@ -41,10 +43,10 @@ void Population::GenerateRandomInitialPopulation(){
 
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){
         chromosome.ShuffleGenes();
-        std::cout << "Chromosome " << chromosomeIndex << ": ";
-        chromosome.PrintGenes();
 
-        std::cout << std::endl << " -------------------------------------- " << std::endl;
+        //std::cout << "Chromosome " << chromosomeIndex << ": ";
+        //chromosome.PrintGenes();
+        //std::cout << std::endl << " -------------------------------------- " << std::endl;
 
         this->AddChromosome(chromosome);
     }
@@ -54,8 +56,6 @@ void Population::GenerateRandomInitialPopulation(){
 
 // TODO: Keep also some of the worst chromosomes to maintain diversity
 void Population::SelectBestChromosomes(){
-    std::cout << "Selecting Best Chromosomes..." << std::endl;
-
     std::sort(chromosomes.begin(), chromosomes.end(), [](const Chromosome& c1, const Chromosome& c2){
         return c1.GetFitnessScore() < c2.GetFitnessScore();
     });
@@ -69,11 +69,9 @@ void Population::SelectBestChromosomes(){
     }
 }
 
-auto Population::GenerateSubPopulation() -> Population{
+auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrategy) -> Population{
     Population newPopulation;
-
     auto size = GetSize();
-    std::cout << "Population Size: " << size << std::endl;
 
     // TODO: Try to use std::tuple instead of OffspringPair struct with cpp17+ [Now we get structured bindings error with std::tuple<std::pair<...>, std::pair<...>>]
     struct OffspringPair {
@@ -92,8 +90,6 @@ auto Population::GenerateSubPopulation() -> Population{
         offSprings2.first.CalculateFitnessScore();
         offSprings2.second.CalculateFitnessScore();
 
-        std::cout << std::endl << std::endl;
-
         return {offSprings1, offSprings2};
     };
 
@@ -102,12 +98,28 @@ auto Population::GenerateSubPopulation() -> Population{
         newPopulation.AddChromosome(betterOffspring);
     };
 
-    for (auto i = 0u; i < size-2; i++) {
-        auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(i+1));
+    auto funcsByStrategy = std::map<CrossoverStrategy, std::function<void()>>{
+        {CrossoverStrategy::EveryPair, [&](){
+            for (auto i = 0u; i < size-1; i++) {
+                for (auto j = i+1; j < size; j++) {
+                    auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(j));
 
-        chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
-        chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
-    }
+                    chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
+                    chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
+                }
+            }
+        }},
+        {CrossoverStrategy::BestToBest, [&](){
+            for (auto i = 0u; i < size-2; i++) {
+                auto [offSprings1, offSprings2] = createOffspringPairs(GetChromosome(i), GetChromosome(i+1));
+
+                chooseAndAddBetterOffspring(offSprings1.first, offSprings1.second);
+                chooseAndAddBetterOffspring(offSprings2.first, offSprings2.second);
+            }
+        }},
+    };
+
+    funcsByStrategy[crossoverStrategy]();
 
     return newPopulation;
 }

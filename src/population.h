@@ -4,6 +4,11 @@
 #include <vector>
 #include "chromosome.h"
 
+enum class CrossoverStrategy{
+    BestToBest, // Each best two chromosomes will be crossed in order
+    EveryPair, // Every pair of chromosomes will be crossed
+};
+
 class Population{
     public:
         Population();
@@ -18,7 +23,7 @@ class Population{
         const auto GetSize() const { return chromosomes.size(); }
 
         void SelectBestChromosomes();
-        auto GenerateSubPopulation() -> Population;
+        auto GenerateSubPopulation(const CrossoverStrategy& crossoverStrategy) -> Population;
 
     private:
         std::vector<Chromosome> chromosomes;

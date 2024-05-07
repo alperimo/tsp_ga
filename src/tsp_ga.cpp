@@ -37,18 +37,23 @@ void TspGa::InitPopulation(){
 }
 
 void TspGa::CreateGenerations(Population& parentPopulation){
-    auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, TspGa::config.maxGenerations);
+    auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, config.maxGenerations);
 
     while (parentPopulation.GetSize() > 4){
         parentPopulation.SelectBestChromosomes();
+        auto parentPopulationSize = parentPopulation.GetSize();
 
-        std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << parentPopulation.GetChromosome(0).GetFitnessScore() << std::endl;
+        std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << parentPopulation.GetChromosome(0).GetFitnessScore() << " with Population Size: " << parentPopulationSize << std::endl;
 
         if (bestChromosome.GetSize() == 0 || parentPopulation.GetChromosome(0).GetFitnessScore() < bestChromosome.GetFitnessScore()){
             bestChromosome = parentPopulation.GetChromosome(0);
         }
 
-        parentPopulation = std::move(parentPopulation.GenerateSubPopulation());
+        if (parentPopulationSize < 4){
+            break;
+        }
+
+        parentPopulation = std::move(parentPopulation.GenerateSubPopulation(CrossoverStrategy::BestToBest));
         parentPopulation.CalculateFitnessScores();
 
         createdGenerationCount++;
@@ -66,10 +71,10 @@ void TspGa::CreateGenerations(Population& parentPopulation){
     bestChromosome.PrintGenes();
 }
 
-void TspGa::Solve(){    
-    TestCrossovers();
-
+void TspGa::Solve(){
     CreateGenerations(this->population);
+
+    //TestCrossovers();
 }
 
 // TODO: Just for tests, remove this function later.
