@@ -27,11 +27,11 @@ void TspGa::InitPopulation(){
 
     distanceHelper.CreateDistanceMatrixFromPoints(points);
 
-    std::cout << "Distance between point index 0 and 1: " << distanceHelper.GetDistanceByPointIndex(0, 1) << std::endl;
-    std::cout << "Distance between point index 7 and 18: " << distanceHelper.GetDistanceByPointIndex(7, 18) << std::endl;
+    std::cout << "Distance between point id 1 and 2: " << distanceHelper.GetDistanceByPointId(1, 2) << std::endl;
+    std::cout << "Distance between point id 7 and 18: " << distanceHelper.GetDistanceByPointId(7, 18) << std::endl;
 
-    std::cout << "Distance between point index 55 and 56: " << distanceHelper.GetDistanceByPointIndex(55, 56) << std::endl;
-    std::cout << "Distance between point index 50 and 81: " << distanceHelper.GetDistanceByPointIndex(50, 81) << std::endl;
+    std::cout << "Distance between point id 55 and 56: " << distanceHelper.GetDistanceByPointId(55, 56) << std::endl;
+    std::cout << "Distance between point id 50 and 81: " << distanceHelper.GetDistanceByPointId(50, 81) << std::endl;
 
     population.GenerateRandomInitialPopulation();
 }

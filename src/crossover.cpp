@@ -78,7 +78,8 @@ auto Crossover::ApplyPartiallyMapped(const Chromosome& chromosome1, const Chromo
             swappedGensMap[gene1] = gene2;
         }
         
-        for (unsigned int geneIndex = 0; geneIndex < chromosomeSize; geneIndex++){
+        // Important: For id based genes/points, we have to start geneIndex from 1.
+        for (unsigned int geneIndex = 1; geneIndex < chromosomeSize; geneIndex++){
             if (geneIndex >= crossoverPointIndex1 && geneIndex <= crossoverPointIndex2){
                 continue;
             }
@@ -88,6 +89,7 @@ auto Crossover::ApplyPartiallyMapped(const Chromosome& chromosome1, const Chromo
             // By looking up the swappedGensMap, we iterate until we find the original replacement gene. (5->1->6) => 5->6
             if (swappedGensMap.find(gene) != swappedGensMap.end()){
                 auto swappedGene = swappedGensMap[gene];
+                
                 while(swappedGensMap.find(swappedGene) != swappedGensMap.end()){
                     swappedGene = swappedGensMap[swappedGene];
                 }
@@ -200,9 +202,9 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
         // Until we return the gene that we have already in the beginning in priorChromosome.
         while (startGene != geneInOtherChr){
             try{
-                geneInOtherChr = otherChromosome.GetGene(currentGeneIndex);
                 currentGeneIndex = priorChrGenPositions.at(geneInOtherChr);
                 childChromosome.SetGene(currentGeneIndex, geneInOtherChr);
+                geneInOtherChr = otherChromosome.GetGene(currentGeneIndex);
             }catch(const std::out_of_range& e){
                 std::cerr << "Exception on Applying Cycle Based Crossover: " << e.what() << std::endl;
                 return priorChromosome;

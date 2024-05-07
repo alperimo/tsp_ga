@@ -22,11 +22,11 @@ void Chromosome::CalculateFitnessScore(){
     auto size = GetSize();
 
     for (unsigned int geneIndex = 0; geneIndex < size - 1; geneIndex++){
-        auto distance = TspGa::distanceHelper.GetDistanceByPointIndex(genes[geneIndex], genes[geneIndex + 1]);
+        auto distance = TspGa::distanceHelper.GetDistanceByPointId(genes[geneIndex], genes[geneIndex + 1]);
         this->fitnessScore += distance;
     }
 
-    this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointIndex(genes[size - 1], genes[0]);
+    this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointId(genes[size - 1], genes[0]);
 }
 
 void Chromosome::PrintGenes() const{
