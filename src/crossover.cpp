@@ -188,15 +188,20 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
         }
 
         auto startGene = priorChromosome.GetGene(1);
-        auto currentGeneIndex = 1u;
         
+        auto currentGeneIndex = 1u;
+
         // To prevent the beginnings which have already cycle when genes in the starting index (1) are same. 
         while (startGene == otherChromosome.GetGene(currentGeneIndex)){
+            childChromosome.SetGene(currentGeneIndex, startGene);
             startGene = priorChromosome.GetGene(++currentGeneIndex);
+            if (currentGeneIndex >= chromosomeSize - 1)
+                return priorChromosome;
         }
 
-        if (currentGeneIndex >= chromosomeSize)
-            return priorChromosome;
+        if (startGene != otherChromosome.GetGene(currentGeneIndex)){
+            childChromosome.SetGene(currentGeneIndex, priorChromosome.GetGene(currentGeneIndex));
+        }
 
         auto geneInOtherChr = otherChromosome.GetGene(currentGeneIndex);
         // Until we return the gene that we have already in the beginning in priorChromosome.
@@ -212,13 +217,10 @@ auto Crossover::ApplyCycleBased(const Chromosome& chromosome1, const Chromosome&
         }
 
         auto& childChromosomeGenes = childChromosome.GetGenes();
-        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&childChromosomeGenes, &childChromosome, &priorChromosome, &otherChromosome](unsigned int& gene){
+        std::for_each(childChromosomeGenes.begin(), childChromosomeGenes.end(), [&](unsigned int& gene){
             auto geneIndex = static_cast<unsigned int>(&gene - &childChromosomeGenes.front());
-            /* 
-                We consider genes with 0 value as empty, so we fill them with the genes in the other chromosome.
-                BUT! If the gene value already was 0 in the prior chromosome, we don't change it because its already filled with 0 as gen value!
-            */
-            if (childChromosome.GetGene(geneIndex) == 0 && priorChromosome.GetGene(geneIndex) != 0){
+            // We consider genes with 0 value as empty, so we fill them with the genes in the other chromosome.
+            if (childChromosome.GetGene(geneIndex) == 0){
                 childChromosome.SetGene(geneIndex, otherChromosome.GetGene(geneIndex));
             }
         });
