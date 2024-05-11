@@ -14,7 +14,7 @@ class DistanceHelper{
         long double CalculateDistance(const Point& point1, const Point& point2);
         void CreateDistanceMatrixFromPoints(const std::vector<Point>& points);
         
-        long double GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2);
+        long double GetDistanceByPointId(const unsigned int& pointId1, const unsigned int& pointId2);
         const auto& GetDistanceMatrix() const { return distanceMatrix; }
 
         long double ToRadians(const long double& degree);

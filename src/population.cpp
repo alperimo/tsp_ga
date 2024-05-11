@@ -38,7 +38,8 @@ void Population::GenerateRandomInitialPopulation(){
             continue;
         }
 
-        chromosome.AddGene(geneIndex);
+        // We decided to use id for the points instead of index so we start from 1
+        chromosome.AddGene(geneIndex + 1);
     }
 
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){

@@ -42,6 +42,6 @@ void DistanceHelper::CreateDistanceMatrixFromPoints(const std::vector<Point>& po
     }
 }
 
-long double DistanceHelper::GetDistanceByPointIndex(const unsigned int& pointIndex1, const unsigned int& pointIndex2){
-    return this->distanceMatrix[pointIndex1][pointIndex2];
+long double DistanceHelper::GetDistanceByPointId(const unsigned int& pointId1, const unsigned int& pointId2){
+    return this->distanceMatrix[pointId1 - 1][pointId2 - 1];
 }
