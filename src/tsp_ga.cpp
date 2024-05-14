@@ -1,10 +1,12 @@
 #include <iostream>
 #include "tsp_ga.h"
 #include "population.h"
+#include "mutation.h"
 #include <array>
 #include <algorithm>
 #include <random>
 #include <tuple>
+#include <list>
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
@@ -36,9 +38,12 @@ void TspGa::InitPopulation(){
     population.GenerateRandomInitialPopulation();
 }
 
+Mutation mutation;
+
 // TODO: "Early stopping" criteria can be added to stop the algorithm if the fitness score is not improved for a certain number of generations.
 void TspGa::CreateGenerations(Population& parentPopulation){
     auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, config.maxGenerations);
+    float lastFitnessScore;
 
     while (parentPopulation.GetSize() > 4){
         parentPopulation.SelectBestChromosomes();
@@ -46,15 +51,30 @@ void TspGa::CreateGenerations(Population& parentPopulation){
 
         std::cout << "Best Solution for the Generation " << createdGenerationCount << ": " << parentPopulation.GetChromosome(0).GetFitnessScore() << " with Population Size: " << parentPopulationSize << std::endl;
 
+        if (createdGenerationCount > 2) {
+            float last = parentPopulation.GetChromosome(0).GetFitnessScore();
+            float prev = lastFitnessScore;
+            
+            if(last == prev){
+                std::cout << "Algorithm is stuck in a local minima. Mutation condition is met..." << std::endl;
+                for (Chromosome chromosome : parentPopulation.GetChromosomes()) {
+                    mutation.ApplySwap(chromosome, config.mutationRate);
+                }
+            }
+        }
+
         if (parentPopulationSize < 4){
             break;
         }
+
+        lastFitnessScore = parentPopulation.GetChromosome(0).GetFitnessScore();
 
         parentPopulation = std::move(parentPopulation.GenerateSubPopulation(CrossoverStrategy::ShuffledSequentialPair));
         parentPopulation.CalculateFitnessScores();
 
         createdGenerationCount++;
-        
+
+
         if (createdGenerationCount == maxGenerations){
             std::cout << "Number of maximum generations have been reached." << std::endl << std::endl;
             std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() <<std::endl;
@@ -63,7 +83,7 @@ void TspGa::CreateGenerations(Population& parentPopulation){
         }
     }
 
-    std::cout << "There are no any enough chromosomes to crossover..." << std::endl;
+    std::cout << "There aren't enough chromosomes to crossover..." << std::endl;
     std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() << std::endl;
     bestChromosome.PrintGenes();
 }
