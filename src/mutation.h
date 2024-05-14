@@ -7,9 +7,9 @@ class Mutation{
     public:
         Mutation();
 
-        static void ApplySwap(Chromosome& chromosome, float mutationRate);
-        static void ApplyScramble(Chromosome& chromosome, float mutationRate);
-        static void ApplyInversion(Chromosome& chromosome, float mutationRate);
+        static Chromosome ApplySwap(const Chromosome& chromosome, float mutationRate);
+        static Chromosome ApplyScramble(const Chromosome& chromosome, float mutationRate);
+        static Chromosome ApplyInversion(const Chromosome& chromosome, float mutationRate);
 };
 
 #endif
