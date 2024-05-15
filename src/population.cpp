@@ -7,6 +7,7 @@
 #include "crossover.h"
 #include <functional>
 #include <map>
+#include "mutation.h"
 
 Population::Population(){
     // Constructor
@@ -143,4 +144,10 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
 
 void Population::Shuffle(){
     std::shuffle(chromosomes.begin(), chromosomes.end(), std::mt19937(std::random_device{}()));
+}
+
+void Population::Mutate(){
+    for(auto& chromosome : GetChromosomes()){
+        Mutation::ApplySwap(chromosome);
+    }
 }
