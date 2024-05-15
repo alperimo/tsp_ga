@@ -17,6 +17,8 @@ class Chromosome{
         std::vector<unsigned int>& GetGenes() { return genes; };
         unsigned int GetSize() const { return static_cast<unsigned int>(genes.size()); }
 
+        bool IsValid() const;
+
         void PrintGenes() const;
         void ShuffleGenes();
 

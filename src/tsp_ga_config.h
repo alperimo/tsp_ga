@@ -6,5 +6,5 @@ struct TspGaConfig{
     unsigned int maxGenerations = 150;
     float mutationRate = 0.1f;
 
-    unsigned int startPointIndex = 24;
+    unsigned int startPointId = 24;
 };

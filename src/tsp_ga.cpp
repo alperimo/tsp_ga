@@ -89,6 +89,11 @@ void TspGa::CreateGenerations(Population& parentPopulation){
     std::cout << "There aren't enough chromosomes to crossover..." << std::endl;
     std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() << std::endl;
     bestChromosome.PrintGenes();
+
+    if (!bestChromosome.IsValid()){
+        std::cerr << "Best Chromosome is not valid" << std::endl;
+    }
+
 }
 
 void TspGa::Solve(){
