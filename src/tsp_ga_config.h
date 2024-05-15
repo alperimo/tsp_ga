@@ -5,5 +5,5 @@ struct TspGaConfig{
     float restChromosomesPct = 0.005f; // Rest of the chromosomes will be transferred to next generation randomly with this percentage
     unsigned int maxGenerations = 100;
 
-    unsigned int startPointIndex = 24;
+    unsigned int startPointId = 24;
 };

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <unordered_map>
 
 Chromosome::Chromosome(const unsigned int& size){
     genes = std::vector<unsigned int>(size);
@@ -27,6 +28,26 @@ void Chromosome::CalculateFitnessScore(){
     }
 
     this->fitnessScore += TspGa::distanceHelper.GetDistanceByPointId(genes[size - 1], genes[0]);
+}
+
+bool Chromosome::IsValid() const{
+    std::unordered_map<unsigned int, unsigned int> visited;
+
+    std::for_each(genes.begin(), genes.end(), [&visited](unsigned int gene){
+        if (visited.find(gene) == visited.end()){
+            visited[gene] = 0;
+        }
+        visited.at(gene)++;
+    });
+
+    for (auto [key, value] : visited){
+        if (value != 1){
+            std::cout << "Gene " << key << " is visited " << value << " times." << std::endl;
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void Chromosome::PrintGenes() const{

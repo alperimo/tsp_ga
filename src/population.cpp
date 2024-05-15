@@ -29,17 +29,18 @@ void Population::ClearPopulation(){
 void Population::GenerateRandomInitialPopulation(){
     this->ClearPopulation();
 
-    auto startPointIndex = TspGa::config.startPointIndex;
+    auto startPointId = TspGa::config.startPointId;
 
     Chromosome chromosome;
-    chromosome.AddGene(startPointIndex);
+    chromosome.AddGene(startPointId);
     for (unsigned int geneIndex = 0; geneIndex < TspGa::config.chromosomeSize; geneIndex++){
-        if (geneIndex == startPointIndex){
+        auto gene = geneIndex + 1;
+        if (gene == startPointId){
             continue;
         }
 
         // We decided to use id for the points instead of index so we start from 1
-        chromosome.AddGene(geneIndex + 1);
+        chromosome.AddGene(gene);
     }
 
     for (unsigned int chromosomeIndex = 0; chromosomeIndex < TspGa::config.initialPopulationSize; chromosomeIndex++){
