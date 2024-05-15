@@ -43,6 +43,7 @@ void TspGa::CreateGenerations(Population& parentPopulation){
     auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, config.maxGenerations);
     float lastFitnessScore;
 
+    auto mutationPatience = 0;
     while (parentPopulation.GetSize() > 4){
         parentPopulation.SelectBestChromosomes();
         auto parentPopulationSize = parentPopulation.GetSize();
@@ -54,16 +55,15 @@ void TspGa::CreateGenerations(Population& parentPopulation){
         }
         
         //Mutation
-        if (config.mutationStartingPoint<=createdGenerationCount) {
-            float last = parentPopulation.GetChromosome(0).GetFitnessScore();
-            float prev = lastFitnessScore;
-            
-            if(last == prev){
-                std::cout << "Algorithm is stuck in a local minima. Mutation condition is met..." << std::endl;
-                parentPopulation.Mutate();
-                parentPopulation.CalculateFitnessScores();
-            }
-            
+        float last = parentPopulation.GetChromosome(0).GetFitnessScore();
+        float prev = lastFitnessScore;
+        
+        mutationPatience = (last == prev) ? mutationPatience + 1 : 0;
+
+        if (mutationPatience >= config.mutationPatience){
+            std::cout << "Algorithm is stuck in a local minima. Mutation condition is met..." << std::endl;
+            parentPopulation.Mutate();
+            parentPopulation.CalculateFitnessScores();
         }
 
         lastFitnessScore = parentPopulation.GetChromosome(0).GetFitnessScore();
@@ -72,7 +72,6 @@ void TspGa::CreateGenerations(Population& parentPopulation){
         parentPopulation.CalculateFitnessScores();
 
         createdGenerationCount++;
-
 
         if (createdGenerationCount == maxGenerations){
             std::cout << "Number of maximum generations have been reached." << std::endl << std::endl;
@@ -89,7 +88,6 @@ void TspGa::CreateGenerations(Population& parentPopulation){
     if (!bestChromosome.IsValid()){
         std::cerr << "Best Chromosome is not valid" << std::endl;
     }
-
 }
 
 void TspGa::Solve(){
