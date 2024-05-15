@@ -42,7 +42,6 @@ void TspGa::InitPopulation(){
 void TspGa::CreateGenerations(Population& parentPopulation){
     auto [createdGenerationCount, maxGenerations] = std::make_tuple(0u, config.maxGenerations);
     float lastFitnessScore;
-    Population mutatedPopulation;
 
     while (parentPopulation.GetSize() > 4){
         parentPopulation.SelectBestChromosomes();
@@ -54,17 +53,14 @@ void TspGa::CreateGenerations(Population& parentPopulation){
             break;
         }
         
-        if (createdGenerationCount > 2) {
+        //Mutation
+        if (config.mutationStartingPoint<=createdGenerationCount) {
             float last = parentPopulation.GetChromosome(0).GetFitnessScore();
             float prev = lastFitnessScore;
             
             if(last == prev){
                 std::cout << "Algorithm is stuck in a local minima. Mutation condition is met..." << std::endl;
-                for (unsigned int i = 0; i < parentPopulation.GetSize(); i++){
-                    mutatedPopulation.AddChromosome(Mutation::ApplyScramble(parentPopulation.GetChromosome(i), config.mutationRate));
-                }
-                
-                parentPopulation = std::move(mutatedPopulation);
+                parentPopulation.Mutate();
                 parentPopulation.CalculateFitnessScores();
             }
             

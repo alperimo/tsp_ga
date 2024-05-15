@@ -19,9 +19,10 @@ class Population{
         void ClearPopulation();
         void GenerateRandomInitialPopulation();
 
-        const auto& GetChromosome(const unsigned int& index) const { return chromosomes.at(index); }
-        const auto& GetChromosomes() const { return chromosomes; }
+        auto& GetChromosome(const unsigned int& index) { return chromosomes.at(index); }
+        auto& GetChromosomes() { return chromosomes; }
         const auto GetSize() const { return chromosomes.size(); }
+        void Mutate();
 
         void SelectBestChromosomes();
         auto GenerateSubPopulation(const CrossoverStrategy& crossoverStrategy) -> Population;
