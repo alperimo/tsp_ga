@@ -148,6 +148,6 @@ void Population::Shuffle(){
 
 void Population::Mutate(){
     for(auto& chromosome : GetChromosomes()){
-        Mutation::ApplySwap(chromosome);
+        Mutation::ApplyInversion(chromosome);
     }
 }
