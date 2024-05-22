@@ -2,11 +2,16 @@
 #define CHROMOSOME_H
 
 #include <vector>
+#include <memory>
 
 class Chromosome{
     public:
         Chromosome(const unsigned int& size = 0);
-        Chromosome(const std::vector<unsigned int>& genes);
+        Chromosome(const Chromosome& other);
+        Chromosome(Chromosome&& other) noexcept;
+        
+        Chromosome& operator=(const Chromosome& other);
+        Chromosome& operator=(Chromosome&& other) noexcept;
 
         void AddGene(unsigned int gene);
 

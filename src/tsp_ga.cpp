@@ -7,6 +7,7 @@
 #include <random>
 #include <tuple>
 #include <list>
+#include <chrono>
 
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
@@ -45,6 +46,8 @@ void TspGa::CreateGenerations(Population& parentPopulation){
 
     auto mutationPatience = 0;
     while (parentPopulation.GetSize() > 4){
+        auto executionStartTime = std::chrono::high_resolution_clock::now();
+
         parentPopulation.SelectBestChromosomes();
         auto parentPopulationSize = parentPopulation.GetSize();
 
@@ -68,8 +71,12 @@ void TspGa::CreateGenerations(Population& parentPopulation){
 
         lastFitnessScore = parentPopulation.GetChromosome(0).GetFitnessScore();
         
-        parentPopulation = std::move(parentPopulation.GenerateSubPopulation(CrossoverStrategy::ShuffledSequentialPair));
+        parentPopulation = parentPopulation.GenerateSubPopulation(CrossoverStrategy::ShuffledSequentialPair);
         parentPopulation.CalculateFitnessScores();
+
+        auto executionEndTime = std::chrono::high_resolution_clock::now();
+        auto executionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(executionEndTime - executionStartTime);
+        std::cout << "Execution time: " << executionDuration.count() << " milliseconds" << std::endl;
 
         createdGenerationCount++;
 

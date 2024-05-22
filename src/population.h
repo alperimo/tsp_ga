@@ -13,6 +13,10 @@ enum class CrossoverStrategy{
 class Population{
     public:
         Population();
+        Population(const Population& other);
+
+        Population& operator=(const Population& other);
+        Population& operator=(Population&& other) noexcept;
 
         void AddChromosome(const Chromosome& chromosome);
         void CalculateFitnessScores();
