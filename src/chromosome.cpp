@@ -4,14 +4,36 @@
 #include <random>
 #include <iostream>
 #include <unordered_map>
+#include <cstring>
 
-Chromosome::Chromosome(const unsigned int& size){
-    genes = std::vector<unsigned int>(size);
+Chromosome::Chromosome(const unsigned int& size)
+    : genes(size, 0)
+{}
+
+Chromosome::Chromosome(const Chromosome& other)
+    : genes(other.genes), 
+      fitnessScore(other.fitnessScore)
+{
 }
 
-Chromosome::Chromosome(const std::vector<unsigned int>& genes_) : genes(genes_)
+Chromosome::Chromosome(Chromosome&& other) noexcept
+    : genes(std::move(other.genes)), 
+      fitnessScore(other.fitnessScore)
 {
-    
+}
+
+Chromosome& Chromosome::operator=(const Chromosome& other){
+    genes = other.genes;
+    fitnessScore = other.fitnessScore;
+
+    return *this;
+}
+
+Chromosome& Chromosome::operator=(Chromosome&& other) noexcept{
+    genes = std::move(other.genes);
+    fitnessScore = other.fitnessScore;
+
+    return *this;
 }
 
 void Chromosome::AddGene(unsigned int gene){

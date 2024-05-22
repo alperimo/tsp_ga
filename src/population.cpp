@@ -13,6 +13,20 @@ Population::Population(){
     // Constructor
 }
 
+Population::Population(const Population& other) : chromosomes(other.chromosomes)
+{
+}
+
+Population& Population::operator=(const Population& other){
+    chromosomes = other.chromosomes;
+    return *this;
+}
+
+Population& Population::operator=(Population&& other) noexcept{
+    chromosomes = std::move(other.chromosomes);
+    return *this;
+}
+
 void Population::AddChromosome(const Chromosome& chromosome){
     chromosomes.push_back(chromosome);
 }
