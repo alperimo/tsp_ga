@@ -96,6 +96,13 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
     Population newPopulation;
     auto size = GetSize();
 
+    // Choose the elite chromosomes and pass them to the next generation
+    const double eliteSize = static_cast<double>(size) * TspGa::config.eliteChromosomesPct;
+    auto lastEliteIndex = static_cast<decltype(chromosomes.begin())::difference_type>(eliteSize);
+    std::for_each(chromosomes.begin(), chromosomes.begin() + lastEliteIndex, [&](const Chromosome& chromosome){
+        newPopulation.AddChromosome(chromosome);
+    });
+
     // TODO: Try to use std::tuple instead of OffspringPair struct with cpp17+ [Now we get structured bindings error with std::tuple<std::pair<...>, std::pair<...>>]
     struct OffspringPair {
         std::pair<Chromosome, Chromosome> offSprings1;
