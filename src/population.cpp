@@ -9,6 +9,8 @@
 #include <map>
 #include "mutation.h"
 
+TspGaConfig tspConfig;
+
 Population::Population(){
     // Constructor
 }
@@ -79,17 +81,19 @@ void Population::SelectBestChromosomes(){
 
     auto populationSize = GetSize();
 
-    const double bestSize = static_cast<double>(populationSize) * TspGa::config.bestChromosomesPct;
+    const double bestSize = static_cast<double>(populationSize) * tspConfig.bestChromosomesPct;
     auto firstIndexOfRest = static_cast<decltype(chromosomes.begin())::difference_type>(bestSize);
     std::shuffle(chromosomes.begin() + firstIndexOfRest, chromosomes.end(), std::mt19937(std::random_device{}()));
     
-    const double restSize = static_cast<double>(populationSize - bestSize) * TspGa::config.restChromosomesPct;
+    const double restSize = static_cast<double>(populationSize - bestSize) * tspConfig.restChromosomesPct;
     auto firstIndexToRemove = firstIndexOfRest + static_cast<decltype(chromosomes.begin())::difference_type>(restSize);
     chromosomes.erase(chromosomes.begin() + firstIndexToRemove, chromosomes.end());
 
     if (TspGa::bestChromosome.GetSize() == 0 || GetChromosome(0).GetFitnessScore() < TspGa::bestChromosome.GetFitnessScore()){
         TspGa::bestChromosome = GetChromosome(0);
     }
+
+    tspConfig.bestChromosomesPct = tspConfig.bestChromosomesPct * (1 - tspConfig.bestChromosomesDecreaseRate);
 }
 
 auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrategy) -> Population{
@@ -168,7 +172,11 @@ void Population::Shuffle(){
 }
 
 void Population::Mutate(){
+    std::cout << "Mutation Rate: " << tspConfig.mutationRate << std::endl;
+
     for(auto& chromosome : GetChromosomes()){
         Mutation::ApplyInversion(chromosome);
     }
+
+    tspConfig.mutationRate = tspConfig.mutationRate * (1 + tspConfig.mutationIncreaseRate);
 }
