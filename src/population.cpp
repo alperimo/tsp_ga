@@ -119,7 +119,7 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
         auto offSprings2 = Crossover::ApplyPartiallyMapped(chromosome1, chromosome2);
 
         offSprings1.first.CalculateFitnessScore();
-        offSprings1.second.CalculateFitnessScore();
+        offSprings1.second.CalculateFitnessScore(); 
 
         offSprings2.first.CalculateFitnessScore();
         offSprings2.second.CalculateFitnessScore();
@@ -127,10 +127,10 @@ auto Population::GenerateSubPopulation(const CrossoverStrategy& crossoverStrateg
         return {offSprings1, offSprings2};
     };
 
-    auto chooseAndAddBetterOffspring = [&](Chromosome& offspring1, Chromosome& offspring2){
-        auto& betterOffspring = offspring1.GetFitnessScore() <= offspring2.GetFitnessScore() ? offspring1 : offspring2;
-        newPopulation.AddChromosome(betterOffspring);
-    };
+        auto chooseAndAddBetterOffspring = [&](Chromosome& offspring1, Chromosome& offspring2){
+            auto& betterOffspring = offspring1.GetFitnessScore() <= offspring2.GetFitnessScore() ? offspring1 : offspring2;
+            newPopulation.AddChromosome(betterOffspring);
+        };
 
     auto funcsByStrategy = std::map<CrossoverStrategy, std::function<void()>>{
         {CrossoverStrategy::EveryPair, [&](){
@@ -175,7 +175,7 @@ void Population::Mutate(){
     std::cout << "Mutation Rate: " << tspConfig.mutationRate << std::endl;
 
     for(auto& chromosome : GetChromosomes()){
-        Mutation::ApplyInversion(chromosome);
+        Mutation::ApplyScramble(chromosome);
     }
 
     tspConfig.mutationRate = tspConfig.mutationRate * (1 + tspConfig.mutationIncreaseRate);

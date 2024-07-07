@@ -12,6 +12,9 @@
 TspGaConfig TspGa::config;
 DistanceHelper TspGa::distanceHelper;
 Chromosome TspGa::bestChromosome;
+auto elapsedTimeMins = 0;
+auto elapsedTimeSecs = 0;
+auto elapsedTimeMs = 0;
 
 TspGa::TspGa(){
     // Constructor
@@ -68,20 +71,24 @@ void TspGa::CreateGenerations(Population& parentPopulation){
             parentPopulation.Mutate();
             parentPopulation.CalculateFitnessScores();
         }
-
         lastFitnessScore = parentPopulation.GetChromosome(0).GetFitnessScore();
-        
+
         parentPopulation = parentPopulation.GenerateSubPopulation(CrossoverStrategy::ShuffledSequentialPair);
         parentPopulation.CalculateFitnessScores();
 
         auto executionEndTime = std::chrono::high_resolution_clock::now();
         auto executionDuration = std::chrono::duration_cast<std::chrono::milliseconds>(executionEndTime - executionStartTime);
         std::cout << "Execution time: " << executionDuration.count() << " milliseconds" << std::endl;
+        elapsedTimeMs += executionDuration.count();
 
         createdGenerationCount++;
 
         if (createdGenerationCount == maxGenerations){
             std::cout << "Number of maximum generations have been reached." << std::endl << std::endl;
+            elapsedTimeMins = elapsedTimeMs / 1000 / 60;
+            elapsedTimeSecs = (elapsedTimeMs - elapsedTimeMins*60*1000) / 1000;
+            elapsedTimeMs = elapsedTimeMs % 1000;
+            std::cout << "Elapsed Time: " << elapsedTimeMins << " mins " << elapsedTimeSecs << " secs " << elapsedTimeMs << " ms" << std::endl;
             std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() <<std::endl;
             bestChromosome.PrintGenes();
             return;
@@ -89,6 +96,10 @@ void TspGa::CreateGenerations(Population& parentPopulation){
     }
 
     std::cout << "There aren't enough chromosomes to crossover..." << std::endl;
+    elapsedTimeMins = elapsedTimeMs / 1000 / 60;
+    elapsedTimeSecs = (elapsedTimeMs - elapsedTimeMins*60*1000) / 1000;
+    elapsedTimeMs = elapsedTimeMs % 1000;
+    std::cout << "Elapsed Time: " << elapsedTimeMins << " mins " << elapsedTimeSecs << " secs " << elapsedTimeMs << " ms" << std::endl;
     std::cout << "Best Solution: " << bestChromosome.GetFitnessScore() << std::endl;
     bestChromosome.PrintGenes();
 
