@@ -29,11 +29,10 @@ def read_ndjson_and_write_to_csv(ndjson_data):
     for idx, map_data in enumerate(ndjson_data, start=0):
         location = map_data.get('location')
         name = map_data.get('name')
-        city_iso = map_data.get('address', {}).get('ISO3166-2-lvl4')  # Adjusted based on your data structure
+        city_iso = map_data.get('address', {}).get('ISO3166-2-lvl4')
         city_index = extract_index_from_iso(city_iso)
         if location and name and city_index is not None:
             cities_data.append([city_index, name, location])
-            print(f"Index: {city_index}, Name: {name}, Location: {location}")  # Debug statement
     # Sort cities_data by index
     cities_data.sort(key=lambda x: x[0])
     # Write sorted data to CSV
