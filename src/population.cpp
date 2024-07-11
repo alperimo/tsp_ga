@@ -175,7 +175,7 @@ void Population::Mutate(){
     std::cout << "Mutation Rate: " << tspConfig.mutationRate << std::endl;
 
     for(auto& chromosome : GetChromosomes()){
-        Mutation::ApplyScramble(chromosome);
+        Mutation::ApplyInversion(chromosome);
     }
 
     tspConfig.mutationRate = tspConfig.mutationRate * (1 + tspConfig.mutationIncreaseRate);
