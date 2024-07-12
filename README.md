@@ -35,13 +35,13 @@ Before you can compile and run this program, make sure you have the following pr
 Open your terminal and navigate to the project directory. Use the following command to compile the program:
 
 ```bash
-/usr/local/bin/g++-13 -fdiagnostics-color=always -g main.cpp chromosome.cpp crossover.cpp distance_helper.cpp file_reader.cpp mutation.cpp point.cpp population.cpp tsp_ga.cpp main.cpp -o executable_output
+/usr/local/bin/g++-13 -fdiagnostics-color=always -g chromosome.cpp crossover.cpp distance_helper.cpp file_reader.cpp mutation.cpp point.cpp population.cpp tsp_ga.cpp main.cpp -o executable_output
 ```
 
 ### Windows
 Open your Command Prompt (or PowerShell) and navigate to the project directory. Use the following command to compile the program:
 ```bash
-g++ -g main.cpp chromosome.cpp crossover.cpp distance_helper.cpp file_reader.cpp mutation.cpp point.cpp population.cpp tsp_ga.cpp main.cpp -o executable_output.exe
+g++ -g chromosome.cpp crossover.cpp distance_helper.cpp file_reader.cpp mutation.cpp point.cpp population.cpp tsp_ga.cpp main.cpp -o executable_output.exe
 ```
 
 ## Usage
